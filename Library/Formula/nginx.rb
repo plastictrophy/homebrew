@@ -143,3 +143,9 @@ __END__
          server_name  localhost;
 
          #charset koi8-r;
+@@ -115,4 +115,5 @@ http {
+     #    }
+     #}
+
++    include /usr/local/var/webapps/*/config/nginx.vhost.conf;
+ }
