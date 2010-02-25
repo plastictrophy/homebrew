@@ -1,5 +1,11 @@
 require 'formula'
 
+class NginxHttpPushModule <Formula
+  url 'http://pushmodule.slact.net/downloads/nginx_http_push_module-0.692.tar.gz'
+  md5 'a948638005669d159fa331a35c066fae'
+  homepage 'http://pushmodule.slact.net'
+end
+
 class Nginx < Formula
   homepage 'http://nginx.org/'
   url 'http://nginx.org/download/nginx-1.0.14.tar.gz'
@@ -47,6 +53,15 @@ class Nginx < Formula
             "--conf-path=#{etc}/nginx/nginx.conf",
             "--pid-path=#{var}/run/nginx.pid",
             "--lock-path=#{var}/nginx/nginx.lock"]
+
+    push_module = NginxHttpPushModule.new
+    push_module.brew do |mod|
+      dest = "#{prefix}/nginx_http_push_module-#{mod.version}"
+
+      system "mkdir -p #{dest}"
+      system "cp -R ./* #{dest}"
+    end
+    args << "--add-module=#{prefix}/nginx_http_push_module-#{push_module.version}"
 
     args << passenger_config_args if ARGV.include? '--with-passenger'
     args << "--with-http_dav_module" if ARGV.include? '--with-webdav'
